@@ -1,5 +1,4 @@
 import java.util.List;
-import java.util.Collections;
 
 public class Main {
     public static int size = 50;

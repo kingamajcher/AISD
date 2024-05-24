@@ -37,11 +37,10 @@ public class Main {
                         bstRand.delete(key);
                     }
 
-                    // Write results to the output files for each trial
                     outputAsc.write(size + " " + bstAsc.getComparisons() + " " + bstAsc.getReads() + " " + bstAsc.getAssignments() + " " + bstAsc.height() + "\n");
-                    outputAsc.flush(); // Ensure data is written immediately
+                    outputAsc.flush();
                     outputRand.write(size + " " + bstRand.getComparisons() + " " + bstRand.getReads() + " " + bstRand.getAssignments() + " " + bstRand.height() + "\n");
-                    outputRand.flush(); // Ensure data is written immediately
+                    outputRand.flush();
                     System.out.println(size);
                     bstAsc.resetCounters();
                     bstRand.resetCounters();
