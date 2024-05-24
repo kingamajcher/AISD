@@ -1,7 +1,8 @@
 import java.util.List;
-import java.util.Collections;
 
 public class Main {
+    public static int size = 30;
+    public static List<Integer> keysToAdd;
     public static void main(String[] args) {
         if (args.length != 1) {
             System.err.println("Usage: java Main <data_type>");
@@ -9,36 +10,29 @@ public class Main {
         }
 
         RedBlackBinarySearchTree bst = new RedBlackBinarySearchTree();
-        String dataType = args[0];
-        if (dataType.equals("asc")) {
-            List<Integer> keysToAdd = Generator.ascendingKeys(30);
-            for (Integer key : keysToAdd) {
-                bst.add(key);
-                bst.printTree();
-            }
 
-            List<Integer> keysToDelete = Generator.randomKeys(30);
-            for (Integer key : keysToDelete) {
-                bst.delete(key);
-                bst.printTree();
-            }
+        String dataType = args[0];
+
+        if (dataType.equals("asc")) {
+            keysToAdd = Generator.ascendingKeys(size);
         }
         else if (dataType.equals("rand")) {
-            List<Integer> keysToAdd = Generator.randomKeys(30);
-            for (Integer key : keysToAdd) {
-                bst.add(key);
-                bst.printTree();
-            }
-
-            List<Integer> keysToDelete = Generator.randomKeys(30);
-            for (Integer key : keysToDelete) {
-                bst.delete(key);
-                bst.printTree();
-            }
+            keysToAdd = Generator.randomKeys(size);
         }
         else {
             System.err.println("data type must be either asc or rand");
             System.exit(1);
+        }
+
+        List<Integer> keysToDelete = Generator.randomKeys(size);
+
+        for (Integer key : keysToAdd) {
+            bst.add(key);
+            bst.printTree();
+        }
+        for (Integer key : keysToDelete) {
+            bst.delete(key);
+            bst.printTree();
         }
     }
 }

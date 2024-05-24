@@ -8,6 +8,10 @@ public class RedBlackBinarySearchTree {
     private Node root;
     private Node nil;
 
+    private long comparisonCount;
+    private long readCount;
+    private long assignmentCount;
+
     public RedBlackBinarySearchTree() {
         nil = new Node(Integer.MIN_VALUE);
         nil.color = BLACK;
@@ -19,7 +23,6 @@ public class RedBlackBinarySearchTree {
         Node addedNode = new Node(value);
         addedNode.left = addedNode.right = addedNode.parent = nil;
         add(addedNode);
-        System.out.println(value + " added to tree");
     }
 
     private void add(Node z) {
@@ -27,25 +30,37 @@ public class RedBlackBinarySearchTree {
         Node x = root;
 
         while (x != nil) {
+            comparisonCount++;
             y = x;
             if (z.value < x.value) {
+                comparisonCount++;
                 x = x.left;
+                readCount++;
             } else {
+                comparisonCount++;
                 x = x.right;
+                readCount++;
             }
         }
 
         z.parent = y;
+        assignmentCount++;
         if (y == nil) {
             root = z;
+            assignmentCount++;
         } else if (z.value < y.value) {
+            comparisonCount++;
             y.left = z;
+            assignmentCount++;
         } else {
+            comparisonCount++;
             y.right = z;
+            assignmentCount++;
         }
         z.left = nil;
         z.right = nil;
         z.color = RED;
+        assignmentCount += 3; // for setting left, right, and color
         fixup(z);
     }
 
@@ -53,9 +68,6 @@ public class RedBlackBinarySearchTree {
         Node nodeToDelete = findNode(root, value);
         if (nodeToDelete != nil) {
             delete(nodeToDelete);
-            System.out.println(value + " deleted from tree");
-        } else {
-            System.out.println(value + " not found in tree");
         }
     }
 
@@ -67,24 +79,30 @@ public class RedBlackBinarySearchTree {
         if (z.left == nil) {
             x = z.right;
             transplant(z, z.right);
+            readCount++;
         } else if (z.right == nil) {
             x = z.left;
             transplant(z, z.left);
+            readCount++;
         } else {
             y = treeMinimum(z.right);
             yOriginalColor = y.color;
+            readCount++;
             x = y.right;
             if (y.parent == z) {
                 x.parent = y;
+                assignmentCount++;
             } else {
                 transplant(y, y.right);
                 y.right = z.right;
                 y.right.parent = y;
+                assignmentCount += 2;
             }
             transplant(z, y);
             y.left = z.left;
             y.left.parent = y;
             y.color = z.color;
+            assignmentCount += 3;
         }
         if (yOriginalColor == BLACK) {
             deleteFixup(x);
@@ -93,66 +111,85 @@ public class RedBlackBinarySearchTree {
 
     private void deleteFixup(Node x) {
         while (x != root && x.color == BLACK) {
+            comparisonCount += 2;
             if (x == x.parent.left) {
                 Node w = x.parent.right;
+                readCount++;
                 if (w.color == RED) {
                     w.color = BLACK;
                     x.parent.color = RED;
                     leftRotate(x.parent);
                     w = x.parent.right;
+                    assignmentCount += 2;
+                    readCount++;
                 }
                 if (w.left.color == BLACK && w.right.color == BLACK) {
                     w.color = RED;
                     x = x.parent;
+                    assignmentCount++;
                 } else {
                     if (w.right.color == BLACK) {
                         w.left.color = BLACK;
                         w.color = RED;
                         rightRotate(w);
                         w = x.parent.right;
+                        assignmentCount += 2;
+                        readCount++;
                     }
                     w.color = x.parent.color;
                     x.parent.color = BLACK;
                     w.right.color = BLACK;
                     leftRotate(x.parent);
+                    assignmentCount += 3;
                     x = root;
                 }
             } else {
                 Node w = x.parent.left;
+                readCount++;
                 if (w.color == RED) {
                     w.color = BLACK;
                     x.parent.color = RED;
                     rightRotate(x.parent);
                     w = x.parent.left;
+                    assignmentCount += 2;
+                    readCount++;
                 }
                 if (w.right.color == BLACK && w.left.color == BLACK) {
                     w.color = RED;
                     x = x.parent;
+                    assignmentCount++;
                 } else {
                     if (w.left.color == BLACK) {
                         w.right.color = BLACK;
                         w.color = RED;
                         leftRotate(w);
                         w = x.parent.left;
+                        assignmentCount += 2;
+                        readCount++;
                     }
                     w.color = x.parent.color;
                     x.parent.color = BLACK;
                     w.left.color = BLACK;
                     rightRotate(x.parent);
+                    assignmentCount += 3;
                     x = root;
                 }
             }
         }
         x.color = BLACK;
+        assignmentCount++;
     }
 
     private Node findNode(Node root, int value) {
         Node current = root;
         while (current != nil && current.value != value) {
+            comparisonCount += 2;
             if (value < current.value) {
                 current = current.left;
+                readCount++;
             } else {
                 current = current.right;
+                readCount++;
             }
         }
         return current;
@@ -161,94 +198,125 @@ public class RedBlackBinarySearchTree {
     private void transplant(Node u, Node v) {
         if (u.parent == nil) {
             root = v;
+            assignmentCount++;
         } else if (u == u.parent.left) {
             u.parent.left = v;
+            assignmentCount++;
         } else {
             u.parent.right = v;
+            assignmentCount++;
         }
         v.parent = u.parent;
+        assignmentCount++;
     }
 
     private Node treeMinimum(Node x) {
         while (x.left != nil) {
             x = x.left;
+            readCount++;
         }
         return x;
     }
 
     private void leftRotate(Node x) {
         Node y = x.right;
+        readCount++;
         x.right = y.left;
+        assignmentCount++;
         if (y.left != nil) {
             y.left.parent = x;
+            assignmentCount++;
         }
         y.parent = x.parent;
+        assignmentCount++;
         if (x.parent == nil) {
             root = y;
+            assignmentCount++;
         } else if (x == x.parent.left) {
             x.parent.left = y;
+            assignmentCount++;
         } else {
             x.parent.right = y;
+            assignmentCount++;
         }
         y.left = x;
         x.parent = y;
+        assignmentCount += 2;
     }
 
     private void rightRotate(Node x) {
         Node y = x.left;
+        readCount++;
         x.left = y.right;
+        assignmentCount++;
         if (y.right != nil) {
             y.right.parent = x;
+            assignmentCount++;
         }
         y.parent = x.parent;
+        assignmentCount++;
         if (x.parent == nil) {
             root = y;
+            assignmentCount++;
         } else if (x == x.parent.right) {
             x.parent.right = y;
+            assignmentCount++;
         } else {
             x.parent.left = y;
+            assignmentCount++;
         }
         y.right = x;
         x.parent = y;
+        assignmentCount += 2;
     }
 
     private void fixup(Node z) {
         while (z.parent.color == RED) {
+            comparisonCount++;
             if (z.parent == z.parent.parent.left) {
                 Node y = z.parent.parent.right;
+                readCount++;
                 if (y.color == RED) {
                     z.parent.color = BLACK;
                     y.color = BLACK;
                     z.parent.parent.color = RED;
                     z = z.parent.parent;
+                    assignmentCount += 3;
                 } else {
                     if (z == z.parent.right) {
                         z = z.parent;
                         leftRotate(z);
+                        assignmentCount++;
                     }
                     z.parent.color = BLACK;
                     z.parent.parent.color = RED;
                     rightRotate(z.parent.parent);
+                    assignmentCount += 2;
                 }
             } else {
                 Node y = z.parent.parent.left;
+                readCount++;
                 if (y.color == RED) {
                     z.parent.color = BLACK;
                     y.color = BLACK;
                     z.parent.parent.color = RED;
                     z = z.parent.parent;
+                    assignmentCount += 3;
                 } else {
                     if (z == z.parent.left) {
                         z = z.parent;
                         rightRotate(z);
+                        assignmentCount++;
                     }
                     z.parent.color = BLACK;
                     z.parent.parent.color = RED;
                     leftRotate(z.parent.parent);
+                    assignmentCount += 2;
                 }
             }
         }
         root.color = BLACK;
+        assignmentCount++;
     }
 
     public int height() {
@@ -266,13 +334,16 @@ public class RedBlackBinarySearchTree {
 
             for (int i = 0; i < levelSize; i++) {
                 Node currentNode = queue.poll();
+                readCount++;
 
                 if (currentNode.left != nil) {
                     queue.add(currentNode.left);
+                    readCount++;
                 }
 
                 if (currentNode.right != nil) {
                     queue.add(currentNode.right);
+                    readCount++;
                 }
             }
         }
@@ -326,5 +397,23 @@ public class RedBlackBinarySearchTree {
             rightTrace[depth] = '|';
             printTreeRecursive(node.right, depth + 1, '\\', leftTrace, rightTrace);
         }
+    }
+
+    public void resetCounters() {
+        comparisonCount = 0;
+        readCount = 0;
+        assignmentCount = 0;
+    }
+
+    public long getComparisons() {
+        return comparisonCount;
+    }
+
+    public long getReads() {
+        return readCount;
+    }
+
+    public long getAssignments() {
+        return assignmentCount;
     }
 }
