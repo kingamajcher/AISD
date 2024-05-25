@@ -4,6 +4,10 @@ import java.util.Queue;
 public class SplayTree {
     private Node root;
 
+    private long comparisonCount;
+    private long readCount;
+    private long assignmentCount;
+
     public SplayTree() {
         root = null;
     }
@@ -11,7 +15,6 @@ public class SplayTree {
     public void add(int value) {
         Node addedNode = new Node(value);
         add(addedNode);
-        System.out.println(value + " added to tree");
     }
 
     public void add(Node z) {
@@ -20,21 +23,28 @@ public class SplayTree {
 
         while (x != null) {
             y = x;
+            comparisonCount++;
             if (x.value < z.value) {
                 x = x.right;
+                readCount++;
             } else {
                 x = x.left;
+                readCount++;
             }
         }
 
         x = z;
         x.parent = y;
+        assignmentCount += 2;
         if (y == null) {
             root = x;
+            assignmentCount++;
         } else if (y.value < x.value) {
             y.right = x;
+            assignmentCount++;
         } else {
             y.left = x;
+            assignmentCount++;
         }
 
         splay(x);
@@ -44,9 +54,6 @@ public class SplayTree {
         Node nodeToDelete = findNode(root, value);
         if (nodeToDelete != null) {
             delete(nodeToDelete);
-            System.out.println(value + " deleted from tree");
-        } else {
-            System.out.println(value + " not found in tree");
         }
     }
 
@@ -66,20 +73,25 @@ public class SplayTree {
                 transplant(y, y.right);
                 y.right = z.right;
                 y.right.parent = y;
+                assignmentCount += 2;
             }
             transplant(z, y);
             y.left = z.left;
             y.left.parent = y;
+            assignmentCount += 2;
         }
     }
 
     private Node findNode(Node root, int value) {
         Node current = root;
         while (current != null && current.value != value) {
+            comparisonCount += 2;
             if (value < current.value) {
                 current = current.left;
+                readCount++;
             } else {
                 current = current.right;
+                readCount++;
             }
         }
         return current;
@@ -88,56 +100,97 @@ public class SplayTree {
     private void transplant(Node u, Node v) {
         if (u.parent == null) {
             root = v;
+            assignmentCount++;
         } else if (u == u.parent.left) {
             u.parent.left = v;
+            assignmentCount++;
         } else {
             u.parent.right = v;
+            assignmentCount++;
         }
         if (v != null) {
             v.parent = u.parent;
+            assignmentCount++;
         }
     }
 
     private Node treeMinimum(Node x) {
         while (x.left != null) {
             x = x.left;
+            readCount++;
         }
         return x;
     }
 
     private void leftRotate(Node x) {
         Node y = x.right;
+        readCount++;
         if (y != null) {
             x.right = y.left;
-            if (y.left != null) y.left.parent = x;
+            assignmentCount++;
+            if (y.left != null) {
+                y.left.parent = x;
+                assignmentCount++;
+            }
             y.parent = x.parent;
+            assignmentCount++;
         }
-        if (x.parent == null) root = y;
-        else if (x == x.parent.left) x.parent.left = y;
-        else x.parent.right = y;
-        if (y != null) y.left = x;
-        x.parent = y;
+        if (x.parent == null) {
+            root = y;
+            assignmentCount++;
+        } else if (x == x.parent.left) {
+            x.parent.left = y;
+            assignmentCount++;
+        } else {
+            x.parent.right = y;
+            assignmentCount++;
+        }
+        if (y != null) {
+            y.left = x;
+            x.parent = y;
+            assignmentCount += 2;
+        }
     }
 
     private void rightRotate(Node x) {
         Node y = x.left;
+        readCount++;
         if (y != null) {
             x.left = y.right;
-            if (y.right != null) y.right.parent = x;
+            assignmentCount++;
+            if (y.right != null) {
+                y.right.parent = x;
+                assignmentCount++;
+            }
             y.parent = x.parent;
+            assignmentCount++;
         }
-        if (x.parent == null) root = y;
-        else if (x == x.parent.left) x.parent.left = y;
-        else x.parent.right = y;
-        if (y != null) y.right = x;
-        x.parent = y;
+        if (x.parent == null) {
+            root = y;
+            assignmentCount++;
+        } else if (x == x.parent.left) {
+            x.parent.left = y;
+            assignmentCount++;
+        } else {
+            x.parent.right = y;
+            assignmentCount++;
+        }
+        if (y != null) {
+            y.right = x;
+            x.parent = y;
+            assignmentCount += 2;
+        }
     }
 
     private void splay(Node x) {
         while (x.parent != null) {
+            comparisonCount++;
             if (x.parent.parent == null) {
-                if (x.parent.left == x) rightRotate(x.parent);
-                else leftRotate(x.parent);
+                if (x.parent.left == x) {
+                    rightRotate(x.parent);
+                } else {
+                    leftRotate(x.parent);
+                }
             } else if (x.parent.left == x && x.parent.parent.left == x.parent) {
                 rightRotate(x.parent.parent);
                 rightRotate(x.parent);
@@ -215,17 +268,38 @@ public class SplayTree {
 
             for (int i = 0; i < levelSize; i++) {
                 Node currentNode = queue.poll();
+                readCount++;
 
                 if (currentNode.left != null) {
                     queue.add(currentNode.left);
+                    readCount++;
                 }
 
                 if (currentNode.right != null) {
                     queue.add(currentNode.right);
+                    readCount++;
                 }
             }
         }
 
         return height;
+    }
+
+    public void resetCounters() {
+        comparisonCount = 0;
+        readCount = 0;
+        assignmentCount = 0;
+    }
+
+    public long getComparisons() {
+        return comparisonCount;
+    }
+
+    public long getReads() {
+        return readCount;
+    }
+
+    public long getAssignments() {
+        return assignmentCount;
     }
 }

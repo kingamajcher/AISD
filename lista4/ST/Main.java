@@ -1,7 +1,7 @@
 import java.util.List;
 
 public class Main {
-    public static int size = 10;
+    public static int size = 50;
     public static List<Integer> keysToAdd;
     public static void main(String[] args) {
         if (args.length != 1) {
@@ -34,15 +34,5 @@ public class Main {
             bst.delete(key);
             bst.printTree();
         }
-
-        for (Integer key : keysToAdd) {
-            System.out.print(key + " ");
-        }
-        System.out.println("\n");
-
-        for (Integer key : keysToDelete) {
-            System.out.print(key + " ");
-        }
-        System.out.print("\n");
     }
 }
