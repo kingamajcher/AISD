@@ -22,12 +22,15 @@ public class SplayTree {
         Node y = null;
 
         while (x != null) {
-            y = x;
             comparisonCount++;
+            y = x;
+            assignmentCount++;
             if (x.value < z.value) {
+                comparisonCount++;
                 x = x.right;
                 readCount++;
             } else {
+                comparisonCount++;
                 x = x.left;
                 readCount++;
             }
@@ -37,12 +40,15 @@ public class SplayTree {
         x.parent = y;
         assignmentCount += 2;
         if (y == null) {
+            comparisonCount++;
             root = x;
             assignmentCount++;
         } else if (y.value < x.value) {
+            comparisonCount += 2;
             y.right = x;
             assignmentCount++;
         } else {
+            comparisonCount += 2;
             y.left = x;
             assignmentCount++;
         }
@@ -59,17 +65,22 @@ public class SplayTree {
 
     public void delete(Node z) {
         if (z == null) {
+            comparisonCount++;
             return;
         }
         splay(z);
 
         if (z.left == null) {
+            comparisonCount++;
             transplant(z, z.right);
         } else if (z.right == null) {
+            comparisonCount += 2;
             transplant(z, z.left);
         } else {
+            comparisonCount += 2;
             Node y = treeMinimum(z.right);
             if (y.parent != z) {
+                comparisonCount++;
                 transplant(y, y.right);
                 y.right = z.right;
                 y.right.parent = y;
@@ -87,28 +98,35 @@ public class SplayTree {
         while (current != null && current.value != value) {
             comparisonCount += 2;
             if (value < current.value) {
+                comparisonCount++;
                 current = current.left;
                 readCount++;
             } else {
+                comparisonCount++;
                 current = current.right;
                 readCount++;
             }
         }
+        comparisonCount++;
         return current;
     }
 
     private void transplant(Node u, Node v) {
         if (u.parent == null) {
+            comparisonCount++;
             root = v;
             assignmentCount++;
         } else if (u == u.parent.left) {
+            comparisonCount += 2;
             u.parent.left = v;
             assignmentCount++;
         } else {
+            comparisonCount += 2;
             u.parent.right = v;
             assignmentCount++;
         }
         if (v != null) {
+            comparisonCount++;
             v.parent = u.parent;
             assignmentCount++;
         }
@@ -116,9 +134,11 @@ public class SplayTree {
 
     private Node treeMinimum(Node x) {
         while (x.left != null) {
+            comparisonCount++;
             x = x.left;
             readCount++;
         }
+        comparisonCount++;
         return x;
     }
 
@@ -126,9 +146,11 @@ public class SplayTree {
         Node y = x.right;
         readCount++;
         if (y != null) {
+            comparisonCount++;
             x.right = y.left;
             assignmentCount++;
             if (y.left != null) {
+                comparisonCount++;
                 y.left.parent = x;
                 assignmentCount++;
             }
@@ -136,16 +158,20 @@ public class SplayTree {
             assignmentCount++;
         }
         if (x.parent == null) {
+            comparisonCount++;
             root = y;
             assignmentCount++;
         } else if (x == x.parent.left) {
+            comparisonCount += 2;
             x.parent.left = y;
             assignmentCount++;
         } else {
+            comparisonCount += 2;
             x.parent.right = y;
             assignmentCount++;
         }
         if (y != null) {
+            comparisonCount++;
             y.left = x;
             x.parent = y;
             assignmentCount += 2;
@@ -156,9 +182,11 @@ public class SplayTree {
         Node y = x.left;
         readCount++;
         if (y != null) {
+            comparisonCount++;
             x.left = y.right;
             assignmentCount++;
             if (y.right != null) {
+                comparisonCount++;
                 y.right.parent = x;
                 assignmentCount++;
             }
@@ -166,16 +194,20 @@ public class SplayTree {
             assignmentCount++;
         }
         if (x.parent == null) {
+            comparisonCount++;
             root = y;
             assignmentCount++;
         } else if (x == x.parent.left) {
+            comparisonCount += 2;
             x.parent.left = y;
             assignmentCount++;
         } else {
+            comparisonCount += 2;
             x.parent.right = y;
             assignmentCount++;
         }
         if (y != null) {
+            comparisonCount++;
             y.right = x;
             x.parent = y;
             assignmentCount += 2;
@@ -186,25 +218,33 @@ public class SplayTree {
         while (x.parent != null) {
             comparisonCount++;
             if (x.parent.parent == null) {
+                comparisonCount++;
                 if (x.parent.left == x) {
+                    comparisonCount++;
                     rightRotate(x.parent);
                 } else {
+                    comparisonCount++;
                     leftRotate(x.parent);
                 }
             } else if (x.parent.left == x && x.parent.parent.left == x.parent) {
+                comparisonCount += 3;
                 rightRotate(x.parent.parent);
                 rightRotate(x.parent);
             } else if (x.parent.right == x && x.parent.parent.right == x.parent) {
+                comparisonCount += 5;
                 leftRotate(x.parent.parent);
                 leftRotate(x.parent);
             } else if (x.parent.left == x && x.parent.parent.right == x.parent) {
+                comparisonCount += 7;
                 rightRotate(x.parent);
                 leftRotate(x.parent);
             } else {
+                comparisonCount += 7;
                 leftRotate(x.parent);
                 rightRotate(x.parent);
             }
         }
+        comparisonCount++;
     }
 
     public void printTree() {
@@ -268,16 +308,13 @@ public class SplayTree {
 
             for (int i = 0; i < levelSize; i++) {
                 Node currentNode = queue.poll();
-                readCount++;
 
                 if (currentNode.left != null) {
                     queue.add(currentNode.left);
-                    readCount++;
                 }
 
                 if (currentNode.right != null) {
                     queue.add(currentNode.right);
-                    readCount++;
                 }
             }
         }

@@ -38,20 +38,22 @@ public class BinarySearchTree {
                 readCount++;
             }
         }
+        comparisonCount++;
 
         z.parent = y;
         assignmentCount++;
         if (y == nil) {
+            comparisonCount++;
             root = z;
             assignmentCount++;
         }
         else if (z.value < y.value) {
-            comparisonCount++;
+            comparisonCount += 2;
             y.left = z;
             assignmentCount++;
         }
         else {
-            comparisonCount++;
+            comparisonCount += 2;
             y.right = z;
             assignmentCount++;
         }
@@ -75,6 +77,7 @@ public class BinarySearchTree {
         else {
             Node y = treeMinimum(z.right);
             if (y.parent != z) {
+                comparisonCount++;
                 transplant(y, y.right);
                 y.right = z.right;
                 y.right.parent = y;
@@ -90,7 +93,7 @@ public class BinarySearchTree {
     private Node findNode(Node root, int value) {
         Node current = root;
         while (current != nil && current.value != value) {
-            comparisonCount += 2;
+            comparisonCount += 3;
             if (value < current.value) {
                 current = current.left;
                 readCount++;
@@ -100,23 +103,28 @@ public class BinarySearchTree {
                 readCount++;
             }
         }
+        comparisonCount++;
         return current;
     }
 
     private void transplant(Node u, Node v) {
         if (u.parent == nil) {
+            comparisonCount++;
             root = v;
             assignmentCount++;
         }
         else if (u == u.parent.left) {
+            comparisonCount +=2;
             u.parent.left = v;
             assignmentCount++;
         }
         else {
+            comparisonCount += 2;
             u.parent.right = v;
             assignmentCount++;
         }
         if (v != nil) {
+            comparisonCount++;
             v.parent = u.parent;
             assignmentCount++;
         }
@@ -124,9 +132,11 @@ public class BinarySearchTree {
 
     private Node treeMinimum(Node x) {
         while (x.left != nil) {
+            comparisonCount++;
             x = x.left;
             readCount++;
         }
+        comparisonCount++;
         return x;
     }
 
@@ -148,12 +158,10 @@ public class BinarySearchTree {
 
                 if (currentNode.left != nil) {
                     queue.add(currentNode.left);
-                    readCount++;
                 }
 
                 if (currentNode.right != nil) {
                     queue.add(currentNode.right);
-                    readCount++;
                 }
             }
         }

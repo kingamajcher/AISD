@@ -10,6 +10,6 @@ public class Node {
 
     public Node(int value) {
         this.value = value;
-        this.color = RED; // New nodes are red by default
+        this.color = RED;
     }
 }
