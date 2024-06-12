@@ -65,14 +65,6 @@ public class Main {
             }
         }
 
-        System.out.println();
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                System.out.printf("%.2f ", kruskalMatrix[i][j]);
-            }
-            System.out.println();
-        }
-
         System.out.printf("\nTotal weight of MST using Kruskal's Algorithm: %.2f\n\n", kruskalMST.totalWeight());
 
         PrimsMST primMST = new PrimsMST(graph);
@@ -91,14 +83,6 @@ public class Main {
                 primMatrix[src][dest] = weight;
                 primMatrix[dest][src] = weight;
             }
-        }
-
-        System.out.println();
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                System.out.printf("%.2f ", primMatrix[i][j]);
-            }
-            System.out.println();
         }
 
         System.out.printf("\nTotal weight of MST using Prim's Algorithm: %.2f\n\n", primMST.totalWeight());
