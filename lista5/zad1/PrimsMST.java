@@ -18,8 +18,8 @@ public class PrimsMST {
         visit(graph, 0);
         while (!pq.isEmpty() && mst.size() < graph.getNumberOfVertices() - 1) {
             Edge edge = pq.poll();
-            int v = edge.getSrc();
-            int w = edge.getDest();
+            int v = edge.getSource();
+            int w = edge.getDestination();
 
             if (marked[v] && marked[w]) continue;
 
@@ -34,7 +34,7 @@ public class PrimsMST {
     private void visit(Graph graph, int vertex) {
         marked[vertex] = true;
         for (Edge edge : graph.adjacencyLists[vertex]) {
-            if (!marked[edge.getOtherVertex(vertex)]) {
+            if (!marked[edge.getOppositeVertex(vertex)]) {
                 pq.offer(edge);
             }
         }

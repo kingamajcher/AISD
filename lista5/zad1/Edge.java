@@ -1,30 +1,30 @@
 public class Edge implements Comparable<Edge> {
-    private final int src, dest;
+    private final int source, destination;
     private final double weight;
 
-    public Edge(int src, int dest, double weight) {
-        this.src = src;
-        this.dest = dest;
+    public Edge(int source, int destination, double weight) {
+        this.source = source;
+        this.destination = destination;
         this.weight = weight;
     }
 
-    public int getSrc() {
-        return src;
+    public int getSource() {
+        return source;
     }
 
-    public int getDest() {
-        return dest;
+    public int getDestination() {
+        return destination;
     }
 
     public double getWeight() {
         return weight;
     }
 
-    public int getOtherVertex(int vertex) {
-        if (vertex == src) {
-            return dest;
-        } else if (vertex == dest) {
-            return src;
+    public int getOppositeVertex(int vertex) {
+        if (vertex == source) {
+            return destination;
+        } else if (vertex == destination) {
+            return source;
         } else {
             throw new IllegalArgumentException("Invalid vertex");
         }
@@ -37,6 +37,6 @@ public class Edge implements Comparable<Edge> {
 
     @Override
     public String toString() {
-        return String.format("(%d, %d, %.2f)", src, dest, weight);
+        return String.format("(%d, %d, %.2f)", source, destination, weight);
     }
 }

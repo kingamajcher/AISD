@@ -4,22 +4,22 @@ import java.util.Random;
 
 public class Graph {
     final List<Edge>[] adjacencyLists;
-    private final int v;
-    private int e;
+    private final int verticesNum;
+    private int edgesNum;
 
-    public Graph(int v) {
-        this.v = v;
-        this.e = 0;
-        this.adjacencyLists = (List<Edge>[]) new List[v];
+    public Graph(int verticesNum) {
+        this.verticesNum = verticesNum;
+        this.edgesNum = 0;
+        this.adjacencyLists = (List<Edge>[]) new List[verticesNum];
 
-        for (int i = 0; i < v; i++) {
+        for (int i = 0; i < verticesNum; i++) {
             adjacencyLists[i] = new ArrayList<Edge>();
         }
 
         Random rand = new Random();
 
-        for (int i = 0; i < v; i++) {
-            for (int j = i + 1; j < v; j++) {
+        for (int i = 0; i < verticesNum; i++) {
+            for (int j = i + 1; j < verticesNum; j++) {
                 double weight = 0;
                 while (weight == 0) {
                     weight = rand.nextDouble();
@@ -31,18 +31,18 @@ public class Graph {
     }
 
     public int getNumberOfEdges() {
-        return e;
+        return edgesNum;
     }
 
     public int getNumberOfVertices() {
-        return v;
+        return verticesNum;
     }
 
     public void addEdge(Edge edge) {
-        int v = edge.getSrc();
-        int w = edge.getDest();
-        adjacencyLists[v].add(edge);
-        adjacencyLists[w].add(edge);
-        e++;
+        int edgeSource = edge.getSource();
+        int edgeDestination = edge.getDestination();
+        adjacencyLists[edgeSource].add(edge);
+        adjacencyLists[edgeDestination].add(edge);
+        edgesNum++;
     }
 }

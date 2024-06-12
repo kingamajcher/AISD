@@ -1,4 +1,5 @@
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Main {
@@ -28,8 +29,8 @@ public class Main {
 
         for (int i = 0; i < n; i++) {
             for (Edge edge : graph.adjacencyLists[i]) {
-                int src = edge.getSrc();
-                int dest = edge.getDest();
+                int src = edge.getSource();
+                int dest = edge.getDestination();
                 double weight = edge.getWeight();
                 adjacencyMatrix[src][dest] = weight;
                 adjacencyMatrix[dest][src] = weight;
@@ -56,8 +57,8 @@ public class Main {
 
         for (int i = 0; i < n; i++) {
             for (Edge edge : kruskalMST.edges()) {
-                int src = edge.getSrc();
-                int dest = edge.getDest();
+                int src = edge.getSource();
+                int dest = edge.getDestination();
                 double weight = edge.getWeight();
                 kruskalMatrix[src][dest] = weight;
                 kruskalMatrix[dest][src] = weight;
@@ -84,8 +85,8 @@ public class Main {
 
         for (int i = 0; i < n; i++) {
             for (Edge edge : primMST.edges()) {
-                int src = edge.getSrc();
-                int dest = edge.getDest();
+                int src = edge.getSource();
+                int dest = edge.getDestination();
                 double weight = edge.getWeight();
                 primMatrix[src][dest] = weight;
                 primMatrix[dest][src] = weight;

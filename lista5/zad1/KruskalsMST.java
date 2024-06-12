@@ -13,7 +13,7 @@ public class KruskalsMST {
         List<Edge> edges = new ArrayList<>();
         for (int i = 0; i < graph.getNumberOfVertices(); i++) {
             for (Edge edge : graph.adjacencyLists[i]) {
-                if (edge.getSrc() < edge.getDest()) {
+                if (edge.getSource() < edge.getDestination()) {
                     edges.add(edge);
                 }
             }
@@ -24,8 +24,8 @@ public class KruskalsMST {
         UnionFind uf = new UnionFind(graph.getNumberOfVertices());
 
         for (Edge edge : edges) {
-            int v = edge.getSrc();
-            int w = edge.getDest();
+            int v = edge.getSource();
+            int w = edge.getDestination();
 
             if (!uf.connected(v, w)) {
                 uf.union(v, w);
