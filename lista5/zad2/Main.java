@@ -1,5 +1,3 @@
-import java.util.*;
-
 public class Main {
     public static void main(String[] args) {
         if (args.length != 1) {
@@ -27,8 +25,8 @@ public class Main {
 
         for (int i = 0; i < n; i++) {
             for (Edge edge : graph.adjacencyLists[i]) {
-                int src = edge.getSrc();
-                int dest = edge.getDest();
+                int src = edge.getSource();
+                int dest = edge.getDestination();
                 double weight = edge.getWeight();
                 adjacencyMatrix[src][dest] = weight;
                 adjacencyMatrix[dest][src] = weight;
@@ -55,64 +53,22 @@ public class Main {
 
         for (int i = 0; i < n; i++) {
             for (Edge edge : primMST.edges()) {
-                int src = edge.getSrc();
-                int dest = edge.getDest();
+                int src = edge.getSource();
+                int dest = edge.getDestination();
                 primMatrix[src][dest] = 1;
                 primMatrix[dest][src] = 1;
             }
         }
 
         int root = 0;
-        int[] rounds = minimizeRounds(primMatrix, n, root);
+        int[] rounds = RoundMinimizer.minimizeRounds(primMatrix, n, root);
         int maxRound = 0;
-        System.out.println("Rounds needed for each vertex:");
+        System.out.println("\nRounds needed for each vertex:");
         for (int i = 0; i < n; i++) {
             if (rounds[i] > maxRound) maxRound = rounds[i];
             System.out.println("Vertex " + i + ": " + rounds[i] + " rounds");
         }
 
-        System.out.println("Maximum round: " + maxRound);
-    }
-
-    public static int[] minimizeRounds(int[][] mst, int n, int root) {
-        List<List<Integer>> adjList = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            adjList.add(new ArrayList<>());
-        }
-
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (mst[i][j] == 1) {
-                    adjList.get(i).add(j);
-                }
-            }
-        }
-
-        int[] rounds = new int[n];
-        Arrays.fill(rounds, -1);
-        Queue<Integer> queue = new LinkedList<>();
-        queue.offer(root);
-        rounds[root] = 0;
-
-        while (!queue.isEmpty()) {
-            int size = queue.size();
-            for (int i = 0; i < size; i++) {
-                int u = queue.poll();
-                
-                List<Integer> children = adjList.get(u);
-                children.sort((a, b) -> adjList.get(b).size() - adjList.get(a).size());
-                int r = rounds[u] + 1;
-
-                for (int v : children) {
-                    if (rounds[v] == -1) {
-                        rounds[v] = r;
-                        queue.offer(v);
-                        r++;
-                    }
-                }
-            }
-        }
-
-        return rounds;
+        System.out.println("\nMaximum round: " + maxRound);
     }
 }
