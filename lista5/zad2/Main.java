@@ -44,7 +44,7 @@ public class Main {
         System.out.println();
 
         PrimsMST primMST = new PrimsMST(graph);
-        System.out.println("Minimum Spanning Tree (MST) edges using Prim's Algorithm:");
+        System.out.println("Minimum Spanning Tree (MST) edges");
         for (Edge edge : primMST.edges()) {
             System.out.println(edge);
         }
@@ -59,16 +59,13 @@ public class Main {
                 primMatrix[dest][src] = 1;
             }
         }
-
+        
         int root = 0;
-        int[] rounds = RoundMinimizer.minimizeRounds(primMatrix, n, root);
-        int maxRound = 0;
-        System.out.println("\nRounds needed for each vertex:");
-        for (int i = 0; i < n; i++) {
-            if (rounds[i] > maxRound) maxRound = rounds[i];
-            System.out.println("Vertex " + i + ": " + rounds[i] + " rounds");
-        }
 
-        System.out.println("\nMaximum round: " + maxRound);
+        System.out.println("\nStarting vertex: " + root + "\n");
+
+        int maxRound = RoundMinimizer.minimizeRounds(primMatrix, n, root);
+
+        System.out.println("Minimum rounds: " + maxRound);
     }
 }
